@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../core/enums/air_quality_status.dart';
 
-final class SensorReading extends Equatable {
+class SensorReading extends Equatable {
   const SensorReading({
     required this.temperature,
     required this.humidity,
