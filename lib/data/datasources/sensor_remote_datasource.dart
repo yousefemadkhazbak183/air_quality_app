@@ -1,8 +1,5 @@
-import 'package:fpdart/fpdart.dart';
-
-import '../../domain/failures/failure.dart';
-import '../models/sensor_reading_model.dart';
+import '../../domain/entities/sensor_reading.dart';
 
 abstract interface class SensorRemoteDatasource {
-  Future<Either<Failure, SensorReadingModel>> fetchLatestReading();
+  Stream<SensorReading> get sensorStream;
 }

@@ -1,8 +1,8 @@
 abstract final class AppConstants {
-  // HTTP
-  static const String baseUrl = 'http://192.168.0.109';
-  static const String sensorDataEndpoint = '/api/data';
-  static const Duration pollingInterval = Duration(seconds: 2);
+  // Supabase
+  static const String supabaseUrl = 'YOUR_SUPABASE_URL';
+  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+  static const String sensorReadingsTable = 'sensor_readings';
 
   // Gas PPM thresholds
   static const double goodThresholdPpm = 400.0;

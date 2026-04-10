@@ -1,50 +1,43 @@
-import 'package:air_high_quality_app/core/constants/app_constants.dart';
-import 'package:air_high_quality_app/domain/usecases/fetch_sensor_reading_usecase.dart';
-import 'package:air_high_quality_app/domain/usecases/get_historical_readings_usecase.dart';
-import 'package:air_high_quality_app/presentation/bloc/sensor_data_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../domain/usecases/get_historical_readings_usecase.dart';
+import '../../../domain/usecases/get_sensor_stream_usecase.dart';
+import 'sensor_data_state.dart';
 
 final class SensorDataCubit extends Cubit<SensorDataState> {
   SensorDataCubit({
-    required FetchSensorReadingUseCase fetchSensorReading,
+    required GetSensorStreamUseCase getSensorStream,
     required GetHistoricalReadingsUseCase getHistoricalReadings,
-  }) : _fetchSensorReading = fetchSensorReading,
+  }) : _getSensorStream = getSensorStream,
        _getHistoricalReadings = getHistoricalReadings,
        super(const SensorDataInitial());
 
-  final FetchSensorReadingUseCase _fetchSensorReading;
+  final GetSensorStreamUseCase _getSensorStream;
   final GetHistoricalReadingsUseCase _getHistoricalReadings;
-  Timer? _pollingTimer;
+  StreamSubscription<dynamic>? _subscription;
 
-  Future<void> startPolling() async {
-    emit(SensorDataLoading());
-    await _fetchAndEmit();
+  void startListening() {
+    emit(const SensorDataLoading());
 
-    _pollingTimer = Timer.periodic(
-      AppConstants.pollingInterval,
-      (_) => _fetchAndEmit(),
-    );
-  }
-
-  Future<void> _fetchAndEmit() async {
-    final result = await _fetchSensorReading();
-
-    result.fold(
-      (failure) => emit(SensorDataError(message: failure.message)),
+    _subscription = _getSensorStream().listen(
       (reading) => emit(
         SensorDataUpdated(reading: reading, history: _getHistoricalReadings()),
       ),
+      onError: (Object error) =>
+          emit(SensorDataError(message: 'Stream error: $error')),
     );
   }
 
-  Future<void> retry() async {
-    await startPolling();
+  void retry() {
+    _subscription?.cancel();
+    startListening();
   }
 
   @override
   Future<void> close() {
-    _pollingTimer?.cancel();
+    _subscription?.cancel();
     return super.close();
   }
 }
