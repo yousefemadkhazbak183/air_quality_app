@@ -18,7 +18,7 @@ Future<void> main() async {
     ),
   );
 
-  await setupInject();
+  await setupInjection();
 
   runApp(const AirQualityApp());
 }

@@ -1,9 +1,10 @@
-import 'package:air_high_quality_app/domain/entities/sensor_reading.dart';
-import 'package:air_high_quality_app/domain/repositories/sensor_repository.dart';
+import '../entities/sensor_reading.dart';
+import '../repositories/sensor_repository.dart';
 
 final class GetHistoricalReadingsUseCase {
-  final SensorRepository _sensorRepository;
+  const GetHistoricalReadingsUseCase(this._repository);
 
-  GetHistoricalReadingsUseCase(this._sensorRepository);
-  List<SensorReading> call() => _sensorRepository.historicalReadings;
+  final SensorRepository _repository;
+
+  List<SensorReading> call() => _repository.historicalReadings;
 }
