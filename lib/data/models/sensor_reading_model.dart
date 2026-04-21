@@ -29,4 +29,13 @@ final class SensorReadingModel extends SensorReading {
       alcohol: (json['alcohol'] as num).toDouble(),
     );
   }
+  Map<String, dynamic> toJson() => {
+    'temperature': temperature,
+    'humidity': humidity,
+    'methane': methane,
+    'propane': propane,
+    'butane': butane,
+    'smoke': smoke,
+    'alcohol': alcohol,
+  };
 }

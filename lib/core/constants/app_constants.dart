@@ -5,8 +5,9 @@ abstract final class AppConstants {
   static const Duration pollingInterval = Duration(seconds: 2);
 
   // Supabase
-  static const String supabaseUrl = 'YOUR_SUPABASE_URL';
-  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+  static const String supabaseUrl = 'https://kpmfqiwpkfxjncwtkakv.supabase.co';
+  static const String supabaseAnonKey =
+      'sb_publishable_ZrYKJ5UaM-lFJI38-cCDqw_QttWFy_b';
   static const String sensorReadingsTable = 'sensor_readings';
 
   // Gas PPM thresholds

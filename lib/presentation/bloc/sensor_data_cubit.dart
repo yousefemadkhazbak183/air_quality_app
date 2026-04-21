@@ -1,51 +1,69 @@
 import 'dart:async';
 
+import 'package:air_high_quality_app/domain/useCases/fetch_and_sync_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_constants.dart';
-import '../../../domain/usecases/fetch_sensor_reading_usecase.dart';
-import '../../../domain/usecases/get_historical_readings_usecase.dart';
+import '../../../domain/entities/sensor_reading.dart';
+
+import '../../domain/useCases/get_historical_readings_use_case.dart';
+import '../../domain/useCases/get_readings_stream_use_case.dart';
 import 'sensor_data_state.dart';
 
 final class SensorDataCubit extends Cubit<SensorDataState> {
   SensorDataCubit({
-    required FetchSensorReadingUseCase fetchSensorReading,
+    required FetchAndSyncUseCase fetchAndSync,
+    required GetReadingsStreamUseCase getReadingsStream,
     required GetHistoricalReadingsUseCase getHistoricalReadings,
-  }) : _fetchSensorReading = fetchSensorReading,
+  }) : _fetchAndSync = fetchAndSync,
+       _getReadingsStream = getReadingsStream,
        _getHistoricalReadings = getHistoricalReadings,
        super(const SensorDataInitial());
 
-  final FetchSensorReadingUseCase _fetchSensorReading;
+  final FetchAndSyncUseCase _fetchAndSync;
+  final GetReadingsStreamUseCase _getReadingsStream;
   final GetHistoricalReadingsUseCase _getHistoricalReadings;
+
+  StreamSubscription<List<SensorReading>>? _streamSubscription;
   Timer? _pollingTimer;
 
-  void startPolling() {
+  void startListening() {
     emit(const SensorDataLoading());
-    _fetchAndEmit();
-    _pollingTimer = Timer.periodic(
-      AppConstants.pollingInterval,
-      (_) => _fetchAndEmit(),
+    _subscribeToStream();
+    _startPolling();
+  }
+
+  void _subscribeToStream() {
+    _streamSubscription = _getReadingsStream().listen(
+      (readings) {
+        if (readings.isEmpty) return;
+        emit(SensorDataUpdated(reading: readings.first, history: readings));
+      },
+      onError: (Object error) =>
+          emit(SensorDataError(message: 'Stream error: $error')),
     );
   }
 
-  Future<void> _fetchAndEmit() async {
-    final result = await _fetchSensorReading();
-    result.fold(
-      (failure) => emit(SensorDataError(message: failure.message)),
-      (reading) => emit(
-        SensorDataUpdated(reading: reading, history: _getHistoricalReadings()),
-      ),
-    );
+  void _startPolling() {
+    _pollingTimer = Timer.periodic(AppConstants.pollingInterval, (_) async {
+      final result = await _fetchAndSync();
+      result.fold(
+        (failure) => emit(SensorDataError(message: failure.message)),
+        (_) {},
+      );
+    });
   }
 
   void retry() {
     _pollingTimer?.cancel();
-    startPolling();
+    _streamSubscription?.cancel();
+    startListening();
   }
 
   @override
   Future<void> close() {
     _pollingTimer?.cancel();
+    _streamSubscription?.cancel();
     return super.close();
   }
 }
