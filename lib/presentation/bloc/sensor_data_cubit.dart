@@ -2,42 +2,50 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/app_constants.dart';
+import '../../../domain/usecases/fetch_sensor_reading_usecase.dart';
 import '../../../domain/usecases/get_historical_readings_usecase.dart';
-import '../../../domain/usecases/get_sensor_stream_usecase.dart';
 import 'sensor_data_state.dart';
 
 final class SensorDataCubit extends Cubit<SensorDataState> {
   SensorDataCubit({
-    required GetSensorStreamUseCase getSensorStream,
+    required FetchSensorReadingUseCase fetchSensorReading,
     required GetHistoricalReadingsUseCase getHistoricalReadings,
-  }) : _getSensorStream = getSensorStream,
+  }) : _fetchSensorReading = fetchSensorReading,
        _getHistoricalReadings = getHistoricalReadings,
        super(const SensorDataInitial());
 
-  final GetSensorStreamUseCase _getSensorStream;
+  final FetchSensorReadingUseCase _fetchSensorReading;
   final GetHistoricalReadingsUseCase _getHistoricalReadings;
-  StreamSubscription<dynamic>? _subscription;
+  Timer? _pollingTimer;
 
-  void startListening() {
+  void startPolling() {
     emit(const SensorDataLoading());
+    _fetchAndEmit();
+    _pollingTimer = Timer.periodic(
+      AppConstants.pollingInterval,
+      (_) => _fetchAndEmit(),
+    );
+  }
 
-    _subscription = _getSensorStream().listen(
+  Future<void> _fetchAndEmit() async {
+    final result = await _fetchSensorReading();
+    result.fold(
+      (failure) => emit(SensorDataError(message: failure.message)),
       (reading) => emit(
         SensorDataUpdated(reading: reading, history: _getHistoricalReadings()),
       ),
-      onError: (Object error) =>
-          emit(SensorDataError(message: 'Stream error: $error')),
     );
   }
 
   void retry() {
-    _subscription?.cancel();
-    startListening();
+    _pollingTimer?.cancel();
+    startPolling();
   }
 
   @override
   Future<void> close() {
-    _subscription?.cancel();
+    _pollingTimer?.cancel();
     return super.close();
   }
 }
