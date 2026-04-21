@@ -6,28 +6,45 @@ import '../../core/constants/app_constants.dart';
 import '../../domain/entities/sensor_reading.dart';
 import '../../domain/failures/failure.dart';
 import '../../domain/repositories/sensor_repository.dart';
-import '../datasources/sensor_remote_datasource.dart';
+import '../datasources/sensor_http_datasource_impl.dart';
+import '../datasources/sensor_supabase_datasource_impl.dart';
+import '../models/sensor_reading_model.dart';
 
 final class SensorRepositoryImpl implements SensorRepository {
-  SensorRepositoryImpl(this._datasource);
+  SensorRepositoryImpl({
+    required this.httpDatasource,
+    required this.supabaseDatasource,
+  });
 
-  final SensorRemoteDatasource _datasource;
+  final SensorHttpDatasourceImpl httpDatasource;
+  final SensorSupabaseDatasourceImpl supabaseDatasource;
+
   final Queue<SensorReading> _history = Queue();
 
   @override
-  Future<Either<Failure, SensorReading>> fetchLatestReading() async {
-    final result = await _datasource.fetchLatestReading();
-    return result.map(_bufferAndReturn);
+  Future<Either<Failure, SensorReading>> fetchAndSync() async {
+    final result = await httpDatasource.fetchLatestReading();
+
+    return result.fold(Left.new, (reading) async {
+      await supabaseDatasource.saveReading(reading);
+      _bufferReading(reading);
+      return Right(reading);
+    });
   }
+
+  @override
+  Stream<List<SensorReading>> get readingsStream =>
+      supabaseDatasource.readingStream.map(
+        (rows) => rows.map((row) => SensorReadingModel.fromJson(row)).toList(),
+      );
 
   @override
   List<SensorReading> get historicalReadings => List.unmodifiable(_history);
 
-  SensorReading _bufferAndReturn(SensorReading reading) {
+  void _bufferReading(SensorReading reading) {
     if (_history.length >= AppConstants.maxHistoricalReadings) {
       _history.removeFirst();
     }
     _history.addLast(reading);
-    return reading;
   }
 }

@@ -1,33 +1,52 @@
+import 'package:air_high_quality_app/domain/useCases/fetch_and_sync_use_case.dart';
+import 'package:air_high_quality_app/domain/useCases/get_historical_readings_use_case.dart';
+import 'package:air_high_quality_app/domain/useCases/get_readings_stream_use_case.dart';
 import 'package:air_high_quality_app/presentation/bloc/sensor_data_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/constants/app_constants.dart';
 import 'data/datasources/sensor_http_datasource_impl.dart';
 import 'data/datasources/sensor_remote_datasource.dart';
+import 'data/datasources/sensor_supabase_datasource_impl.dart';
 import 'data/repositories/sensor_repository_impl.dart';
 import 'domain/repositories/sensor_repository.dart';
-import 'domain/usecases/fetch_sensor_reading_usecase.dart';
-import 'domain/usecases/get_historical_readings_usecase.dart';
 
 final GetIt sl = GetIt.instance;
 
 Future<void> setupInjection() async {
+  await Supabase.initialize(
+    url: AppConstants.supabaseUrl,
+    anonKey: AppConstants.supabaseAnonKey,
+  );
+
   // HTTP
   sl.registerLazySingleton<http.Client>(http.Client.new);
+
+  // Supabase
+  sl.registerLazySingleton<SupabaseClient>(() => Supabase.instance.client);
 
   // Datasources
   sl.registerLazySingleton<SensorRemoteDatasource>(
     () => SensorHttpDatasourceImpl(sl<http.Client>()),
   );
+  sl.registerLazySingleton(
+    () => SensorSupabaseDatasourceImpl(sl<SupabaseClient>()),
+  );
 
   // Repositories
   sl.registerLazySingleton<SensorRepository>(
-    () => SensorRepositoryImpl(sl<SensorRemoteDatasource>()),
+    () => SensorRepositoryImpl(
+      httpDatasource: sl<SensorHttpDatasourceImpl>(),
+      supabaseDatasource: sl<SensorSupabaseDatasourceImpl>(),
+    ),
   );
 
-  // Usecases
+  // UseCases
+  sl.registerLazySingleton(() => FetchAndSyncUseCase(sl<SensorRepository>()));
   sl.registerLazySingleton(
-    () => FetchSensorReadingUseCase(sl<SensorRepository>()),
+    () => GetReadingsStreamUseCase(sl<SensorRepository>()),
   );
   sl.registerLazySingleton(
     () => GetHistoricalReadingsUseCase(sl<SensorRepository>()),
@@ -36,7 +55,8 @@ Future<void> setupInjection() async {
   // Cubits
   sl.registerFactory(
     () => SensorDataCubit(
-      fetchSensorReading: sl<FetchSensorReadingUseCase>(),
+      fetchAndSync: sl<FetchAndSyncUseCase>(),
+      getReadingsStream: sl<GetReadingsStreamUseCase>(),
       getHistoricalReadings: sl<GetHistoricalReadingsUseCase>(),
     ),
   );
