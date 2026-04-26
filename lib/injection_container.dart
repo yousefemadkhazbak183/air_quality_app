@@ -1,5 +1,4 @@
 import 'package:air_high_quality_app/domain/useCases/fetch_and_sync_use_case.dart';
-import 'package:air_high_quality_app/domain/useCases/get_historical_readings_use_case.dart';
 import 'package:air_high_quality_app/domain/useCases/get_readings_stream_use_case.dart';
 import 'package:air_high_quality_app/presentation/bloc/sensor_data_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -8,7 +7,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/constants/app_constants.dart';
 import 'data/datasources/sensor_http_datasource_impl.dart';
-import 'data/datasources/sensor_remote_datasource.dart';
 import 'data/datasources/sensor_supabase_datasource_impl.dart';
 import 'data/repositories/sensor_repository_impl.dart';
 import 'domain/repositories/sensor_repository.dart';
@@ -28,10 +26,10 @@ Future<void> setupInjection() async {
   sl.registerLazySingleton<SupabaseClient>(() => Supabase.instance.client);
 
   // Datasources
-  sl.registerLazySingleton<SensorRemoteDatasource>(
+  sl.registerLazySingleton<SensorHttpDatasourceImpl>(
     () => SensorHttpDatasourceImpl(sl<http.Client>()),
   );
-  sl.registerLazySingleton(
+  sl.registerLazySingleton<SensorSupabaseDatasourceImpl>(
     () => SensorSupabaseDatasourceImpl(sl<SupabaseClient>()),
   );
 
@@ -48,16 +46,12 @@ Future<void> setupInjection() async {
   sl.registerLazySingleton(
     () => GetReadingsStreamUseCase(sl<SensorRepository>()),
   );
-  sl.registerLazySingleton(
-    () => GetHistoricalReadingsUseCase(sl<SensorRepository>()),
-  );
 
   // Cubits
   sl.registerFactory(
     () => SensorDataCubit(
       fetchAndSync: sl<FetchAndSyncUseCase>(),
       getReadingsStream: sl<GetReadingsStreamUseCase>(),
-      getHistoricalReadings: sl<GetHistoricalReadingsUseCase>(),
     ),
   );
 }
