@@ -39,39 +39,46 @@ class SensorCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: accentColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: accentColor.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(icon, color: accentColor, size: 18),
                     ),
-                    child: Icon(icon, color: accentColor, size: 18),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            subtitle,
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 11,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [

@@ -34,7 +34,7 @@ final class SensorRepositoryImpl implements SensorRepository {
 
   @override
   Stream<List<SensorReading>> get readingsStream =>
-      supabaseDatasource.readingStream.map(
+      supabaseDatasource.readingsStream.map(
         (rows) => rows.map((row) => SensorReadingModel.fromJson(row)).toList(),
       );
 
