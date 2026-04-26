@@ -1,18 +1,20 @@
-import 'package:air_high_quality_app/core/constants/app_constants.dart';
-import 'package:air_high_quality_app/data/models/sensor_reading_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../core/constants/app_constants.dart';
+import '../models/sensor_reading_model.dart';
 
 final class SensorSupabaseDatasourceImpl {
   const SensorSupabaseDatasourceImpl(this._client);
 
   final SupabaseClient _client;
-  Future<void> saveReading(SensorReadingModel readingModel) async {
+
+  Future<void> saveReading(SensorReadingModel reading) async {
     await _client
         .from(AppConstants.sensorReadingsTable)
-        .insert(readingModel.toJson());
+        .insert(reading.toJson());
   }
 
-  Stream<List<Map<String, dynamic>>> get readingStream => _client
+  Stream<List<Map<String, dynamic>>> get readingsStream => _client
       .from(AppConstants.sensorReadingsTable)
       .stream(primaryKey: ['id'])
       .order('created_at', ascending: false)
