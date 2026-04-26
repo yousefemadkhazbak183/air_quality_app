@@ -1,28 +1,23 @@
 import 'dart:async';
 
 import 'package:air_high_quality_app/domain/useCases/fetch_and_sync_use_case.dart';
+import 'package:air_high_quality_app/domain/useCases/get_readings_stream_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../domain/entities/sensor_reading.dart';
-
-import '../../domain/useCases/get_historical_readings_use_case.dart';
-import '../../domain/useCases/get_readings_stream_use_case.dart';
 import 'sensor_data_state.dart';
 
 final class SensorDataCubit extends Cubit<SensorDataState> {
   SensorDataCubit({
     required FetchAndSyncUseCase fetchAndSync,
     required GetReadingsStreamUseCase getReadingsStream,
-    required GetHistoricalReadingsUseCase getHistoricalReadings,
   }) : _fetchAndSync = fetchAndSync,
        _getReadingsStream = getReadingsStream,
-       _getHistoricalReadings = getHistoricalReadings,
        super(const SensorDataInitial());
 
   final FetchAndSyncUseCase _fetchAndSync;
   final GetReadingsStreamUseCase _getReadingsStream;
-  final GetHistoricalReadingsUseCase _getHistoricalReadings;
 
   StreamSubscription<List<SensorReading>>? _streamSubscription;
   Timer? _pollingTimer;
