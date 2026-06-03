@@ -1,6 +1,5 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
-
-import '../../core/theme/app_colors.dart';
 
 class SensorTile extends StatelessWidget {
   const SensorTile({
@@ -21,9 +20,9 @@ class SensorTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.cardBorder),
+        border: Border.all(color: context.cardBorderColor),
       ),
       child: Row(
         children: [
@@ -42,16 +41,16 @@ class SensorTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    color: context.textPrimaryColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
+                  style: TextStyle(
+                    color: context.textSecondaryColor,
                     fontSize: 12,
                   ),
                 ),
@@ -62,7 +61,7 @@ class SensorTile extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: const BoxDecoration(
-              color: AppColors.good,
+              color: Color(0xFF00C17C),
               shape: BoxShape.circle,
             ),
           ),

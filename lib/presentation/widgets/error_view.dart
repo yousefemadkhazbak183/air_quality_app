@@ -1,3 +1,4 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:air_high_quality_app/presentation/bloc/sensor_data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ class ErrorView extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.textSecondary),
+              style: TextStyle(color: context.textSecondaryColor),
             ),
             const SizedBox(height: 24),
             ElevatedButton(

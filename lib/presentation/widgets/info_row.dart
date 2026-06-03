@@ -1,3 +1,4 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -27,15 +28,15 @@ class InfoRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
+                style: TextStyle(
+                  color: context.textSecondaryColor,
                   fontSize: 11,
                 ),
               ),
               Text(
                 value,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: context.textPrimaryColor,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),

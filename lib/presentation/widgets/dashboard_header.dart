@@ -1,3 +1,4 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -26,13 +27,13 @@ class DashboardHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'AirGuard',
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: context.textPrimaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
@@ -40,7 +41,7 @@ class DashboardHeader extends StatelessWidget {
                 Text(
                   'Live Air Monitoring',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                     fontSize: 11,
                   ),
                 ),
@@ -59,9 +60,9 @@ class DashboardHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 6),
-            const Icon(
+            Icon(
               Icons.wifi_rounded,
-              color: AppColors.textSecondary,
+              color: context.textSecondaryColor,
               size: 18,
             ),
           ],

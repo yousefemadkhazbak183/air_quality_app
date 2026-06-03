@@ -1,3 +1,4 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
@@ -29,9 +30,18 @@ class SensorCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorder),
+        border: Border.all(color: context.cardBorderColor),
+        boxShadow: [
+          BoxShadow(
+            color: context.isDark
+                ? AppColors.cardShadow
+                : AppColors.lightCardShadow,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,8 +65,8 @@ class SensorCard extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
+                      style: TextStyle(
+                        color: context.textPrimaryColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -65,8 +75,8 @@ class SensorCard extends StatelessWidget {
                       subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
+                      style: TextStyle(
+                        color: context.textSecondaryColor,
                         fontSize: 11,
                       ),
                     ),
@@ -92,8 +102,8 @@ class SensorCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
                   unit,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
+                  style: TextStyle(
+                    color: context.textSecondaryColor,
                     fontSize: 13,
                   ),
                 ),
@@ -106,7 +116,7 @@ class SensorCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
                 value: progressValue,
-                backgroundColor: AppColors.surfaceVariant,
+                backgroundColor: context.surfaceVariantColor,
                 valueColor: AlwaysStoppedAnimation<Color>(accentColor),
                 minHeight: 6,
               ),

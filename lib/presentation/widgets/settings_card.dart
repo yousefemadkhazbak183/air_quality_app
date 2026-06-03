@@ -1,6 +1,5 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
-
-import '../../core/theme/app_colors.dart';
 
 class SettingsCard extends StatelessWidget {
   const SettingsCard({super.key, required this.children});
@@ -12,9 +11,9 @@ class SettingsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorder),
+        border: Border.all(color: context.cardBorderColor),
       ),
       child: Column(children: children),
     );

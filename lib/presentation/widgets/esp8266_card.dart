@@ -1,6 +1,8 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+
 import 'status_badge.dart';
 
 class Esp8266Card extends StatelessWidget {
@@ -18,9 +20,9 @@ class Esp8266Card extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorder),
+        border: Border.all(color: context.cardBorderColor),
       ),
       child: Column(
         children: [
@@ -39,14 +41,14 @@ class Esp8266Card extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'ESP8266',
                       style: TextStyle(
-                        color: AppColors.textPrimary,
+                        color: context.textPrimaryColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -54,7 +56,7 @@ class Esp8266Card extends StatelessWidget {
                     Text(
                       'Main Controller',
                       style: TextStyle(
-                        color: AppColors.textSecondary,
+                        color: context.textSecondaryColor,
                         fontSize: 12,
                       ),
                     ),
@@ -66,15 +68,15 @@ class Esp8266Card extends StatelessWidget {
           ),
           if (lastUpdate != null) ...[
             const SizedBox(height: 12),
-            const Divider(color: AppColors.divider),
+            Divider(color: context.dividerColor),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Last Data Update',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                     fontSize: 12,
                   ),
                 ),
@@ -82,8 +84,8 @@ class Esp8266Card extends StatelessWidget {
                   '${lastUpdate!.hour.toString().padLeft(2, '0')}:'
                   '${lastUpdate!.minute.toString().padLeft(2, '0')}:'
                   '${lastUpdate!.second.toString().padLeft(2, '0')}',
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    color: context.textPrimaryColor,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),

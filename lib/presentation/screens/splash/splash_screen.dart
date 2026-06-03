@@ -1,4 +1,4 @@
-import 'package:air_high_quality_app/presentation/widgets/splash_content.dart';
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,11 +44,43 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Center(
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: const SplashContent(),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              const Icon(Icons.air_rounded, size: 88, color: AppColors.good),
+              const SizedBox(height: 16),
+              Text(
+                'AirGuard',
+                style: TextStyle(
+                  color: context.textPrimaryColor,
+                  fontSize: 36,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Live Air Monitoring',
+                style: TextStyle(
+                  color: context.textSecondaryColor,
+                  fontSize: 14,
+                  letterSpacing: 2,
+                ),
+              ),
+              const Spacer(),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 48),
+                child: CircularProgressIndicator(
+                  color: AppColors.good,
+                  strokeWidth: 2,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
