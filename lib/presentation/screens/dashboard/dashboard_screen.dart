@@ -14,7 +14,6 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: BlocBuilder<SensorDataCubit, SensorDataState>(
           builder: (context, state) => switch (state) {

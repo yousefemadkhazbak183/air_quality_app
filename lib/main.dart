@@ -13,13 +13,12 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Color(0xFF0A0A0A),
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Color(0xFFF5F7FA),
     ),
   );
 
   await setupInjection();
-
   runApp(const AirQualityApp());
 }
 
@@ -33,7 +32,9 @@ class AirQualityApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'AirGuard',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.dark,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.light,
         routerConfig: AppRouter.router,
       ),
     );

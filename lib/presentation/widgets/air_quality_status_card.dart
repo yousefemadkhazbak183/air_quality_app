@@ -1,7 +1,9 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/enums/air_quality_status.dart';
 import '../../core/theme/app_colors.dart';
+
 import '../../core/utils/air_quality_calculator.dart';
 import '../../domain/entities/sensor_reading.dart';
 
@@ -22,16 +24,25 @@ class AirQualityStatusCard extends StatelessWidget {
       duration: const Duration(milliseconds: 500),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _statusColor.withValues(alpha: 0.3)),
+        boxShadow: [
+          BoxShadow(
+            color: context.isDark
+                ? AppColors.cardShadow
+                : AppColors.lightCardShadow,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Air Quality Status',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+            style: TextStyle(color: context.textSecondaryColor, fontSize: 13),
           ),
           const SizedBox(height: 12),
           Row(
@@ -68,8 +79,8 @@ class AirQualityStatusCard extends StatelessWidget {
                   ),
                   Text(
                     reading.airQualityStatus.description,
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
+                    style: TextStyle(
+                      color: context.textSecondaryColor,
                       fontSize: 13,
                     ),
                   ),
@@ -84,26 +95,26 @@ class AirQualityStatusCard extends StatelessWidget {
               value: AirQualityCalculator.toProgressValue(
                 reading.dominantGasLevel,
               ),
-              backgroundColor: AppColors.surfaceVariant,
+              backgroundColor: context.surfaceVariantColor,
               valueColor: AlwaysStoppedAnimation<Color>(_statusColor),
               minHeight: 6,
             ),
           ),
           const SizedBox(height: 8),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Good',
-                style: TextStyle(color: AppColors.textHint, fontSize: 11),
+                style: TextStyle(color: context.textHintColor, fontSize: 11),
               ),
               Text(
                 'Moderate',
-                style: TextStyle(color: AppColors.textHint, fontSize: 11),
+                style: TextStyle(color: context.textHintColor, fontSize: 11),
               ),
               Text(
                 'Dangerous',
-                style: TextStyle(color: AppColors.textHint, fontSize: 11),
+                style: TextStyle(color: context.textHintColor, fontSize: 11),
               ),
             ],
           ),
