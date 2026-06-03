@@ -6,6 +6,7 @@ import '../../domain/entities/sensor_reading.dart';
 import 'air_quality_status_card.dart';
 import 'connection_status_bar.dart';
 import 'dashboard_header.dart';
+import 'gas_cards_row.dart';
 import 'sensor_card.dart';
 
 class DashboardBody extends StatelessWidget {
@@ -66,6 +67,18 @@ class DashboardBody extends StatelessWidget {
             showProgress: true,
             progressValue: reading.humidity / 100,
           ),
+          const SizedBox(height: 20),
+          const Text(
+            'GAS BREAKDOWN',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 8),
+          GasCardsRow(reading: reading),
           const SizedBox(height: 12),
           const ConnectionStatusBar(),
         ],

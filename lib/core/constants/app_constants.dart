@@ -1,6 +1,6 @@
 abstract final class AppConstants {
   // HTTP API
-  static const String baseUrl = 'http://192.168.0.109';
+  static const String baseUrl = 'http://192.168.43.150';
   static const String sensorDataEndpoint = '/api/data';
   static const Duration pollingInterval = Duration(seconds: 2);
 
