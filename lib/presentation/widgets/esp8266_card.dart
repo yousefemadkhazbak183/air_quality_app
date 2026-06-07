@@ -15,6 +15,13 @@ class Esp8266Card extends StatelessWidget {
   final bool isConnected;
   final DateTime? lastUpdate;
 
+  String _formatTime(DateTime utcTime) {
+    final localTime = utcTime.toLocal();
+    return '${localTime.hour.toString().padLeft(2, '0')}:'
+        '${localTime.minute.toString().padLeft(2, '0')}:'
+        '${localTime.second.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -81,9 +88,7 @@ class Esp8266Card extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${lastUpdate!.hour.toString().padLeft(2, '0')}:'
-                  '${lastUpdate!.minute.toString().padLeft(2, '0')}:'
-                  '${lastUpdate!.second.toString().padLeft(2, '0')}',
+                  _formatTime(lastUpdate!),
                   style: TextStyle(
                     color: context.textPrimaryColor,
                     fontSize: 12,

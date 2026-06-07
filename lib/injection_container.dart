@@ -1,6 +1,7 @@
 import 'package:air_high_quality_app/domain/useCases/fetch_and_sync_use_case.dart';
 import 'package:air_high_quality_app/domain/useCases/get_readings_stream_use_case.dart';
 import 'package:air_high_quality_app/presentation/bloc/sensor_data_cubit.dart';
+import 'package:air_high_quality_app/presentation/bloc/theme_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -54,4 +55,6 @@ Future<void> setupInjection() async {
       getReadingsStream: sl<GetReadingsStreamUseCase>(),
     ),
   );
+  // في آخر الـ Cubits
+  sl.registerLazySingleton<ThemeCubit>(ThemeCubit.new);
 }

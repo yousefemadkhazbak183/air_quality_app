@@ -27,7 +27,7 @@ class ThresholdTile extends StatelessWidget {
             Text(
               label,
               style: const TextStyle(
-                color: AppColors.textPrimary,
+                color: AppColors.surfaceVariant,
                 fontSize: 14,
               ),
             ),

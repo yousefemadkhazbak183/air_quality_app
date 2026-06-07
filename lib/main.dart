@@ -1,4 +1,5 @@
 import 'package:air_high_quality_app/presentation/bloc/sensor_data_cubit.dart';
+import 'package:air_high_quality_app/presentation/bloc/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,11 +12,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Color(0xFFF5F7FA),
-    ),
+    const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
   );
 
   await setupInjection();
@@ -27,15 +24,22 @@ class AirQualityApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SensorDataCubit>(
-      create: (_) => sl<SensorDataCubit>(),
-      child: MaterialApp.router(
-        title: 'AirGuard',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.light,
-        routerConfig: AppRouter.router,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SensorDataCubit>(create: (_) => sl<SensorDataCubit>()),
+        BlocProvider<ThemeCubit>(create: (_) => sl<ThemeCubit>()),
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp.router(
+            title: 'AirGuard',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeMode,
+            routerConfig: AppRouter.router,
+          );
+        },
       ),
     );
   }

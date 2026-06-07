@@ -13,7 +13,7 @@ class AnalyticsHeader extends StatelessWidget {
         Text(
           'Analytics',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: AppColors.lightTextPrimary,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
