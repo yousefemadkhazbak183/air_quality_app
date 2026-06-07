@@ -13,7 +13,7 @@ class DeviceHeader extends StatelessWidget {
         Text(
           'Device',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: AppColors.lightTextPrimary,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),

@@ -13,7 +13,7 @@ class SettingsHeader extends StatelessWidget {
         Text(
           'Settings',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: AppColors.lightTextPrimary,
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),

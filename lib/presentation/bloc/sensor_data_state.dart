@@ -18,13 +18,18 @@ final class SensorDataLoading extends SensorDataState {
 }
 
 final class SensorDataUpdated extends SensorDataState {
-  const SensorDataUpdated({required this.reading, required this.history});
+  const SensorDataUpdated({
+    required this.reading,
+    required this.history,
+    this.isEsp8266Connected = false,
+  });
 
   final SensorReading reading;
   final List<SensorReading> history;
+  final bool isEsp8266Connected;
 
   @override
-  List<Object?> get props => [reading, history];
+  List<Object?> get props => [reading, history, isEsp8266Connected];
 }
 
 final class SensorDataError extends SensorDataState {

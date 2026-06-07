@@ -1,4 +1,7 @@
+import 'package:air_high_quality_app/core/extension/theme_extension.dart';
+import 'package:air_high_quality_app/presentation/bloc/theme_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
@@ -17,12 +20,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _pushNotifications = true;
-  bool _darkMode = true;
   bool _hapticFeedback = true;
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.read<ThemeCubit>().isDarkMode;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -36,22 +39,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(height: 8),
               SettingsCard(
                 children: [
-                  ToggleTile(
-                    icon: Icons.notifications_outlined,
-                    title: 'Push Notifications',
-                    subtitle: 'Get alerts for dangerous air quality',
-                    value: _pushNotifications,
-                    onChanged: (v) => setState(() => _pushNotifications = v),
-                  ),
-                  const Divider(color: AppColors.divider),
+                  // ToggleTile(
+                  //   icon: Icons.notifications_outlined,
+                  //   title: 'Push Notifications',
+                  //   subtitle: 'Get alerts for dangerous air quality',
+                  //   value: _pushNotifications,
+                  //   onChanged: (v) {
+                  //     setState(() => _pushNotifications = v);
+                  //     context.read<SensorDataCubit>().setNotificationsEnabled(
+                  //       v,
+                  //     );
+                  //   },
+                  // ),
+                  Divider(color: context.dividerColor),
                   ToggleTile(
                     icon: Icons.dark_mode_outlined,
                     title: 'Dark Mode',
                     subtitle: 'Enable dark theme for eye comfort',
-                    value: _darkMode,
-                    onChanged: (v) => setState(() => _darkMode = v),
+                    value: isDark,
+                    onChanged: (_) => context.read<ThemeCubit>().toggleTheme(),
                   ),
-                  const Divider(color: AppColors.divider),
+                  Divider(color: context.dividerColor),
                   ToggleTile(
                     icon: Icons.vibration_outlined,
                     title: 'Haptic Feedback',
@@ -91,13 +99,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: 'Privacy Policy',
                     subtitle: 'How we handle your data',
                   ),
-                  const Divider(color: AppColors.divider),
+                  Divider(color: context.dividerColor),
                   NavigationTile(
                     icon: Icons.help_outline_rounded,
                     title: 'Help & Support',
                     subtitle: 'Get help with the app',
                   ),
-                  const Divider(color: AppColors.divider),
+                  Divider(color: context.dividerColor),
                   NavigationTile(
                     icon: Icons.info_outline_rounded,
                     title: 'About AirGuard',

@@ -6,10 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../widgets/device_header.dart';
 import '../../widgets/esp8266_card.dart';
-import '../../widgets/info_row.dart';
 import '../../widgets/section_label.dart';
 import '../../widgets/sensor_tile.dart';
-import '../../widgets/settings_card.dart';
 
 class DeviceScreen extends StatelessWidget {
   const DeviceScreen({super.key});
@@ -26,12 +24,18 @@ class DeviceScreen extends StatelessWidget {
               const DeviceHeader(),
               const SizedBox(height: 20),
               BlocBuilder<SensorDataCubit, SensorDataState>(
-                builder: (context, state) => Esp8266Card(
-                  isConnected: state is SensorDataUpdated,
-                  lastUpdate: state is SensorDataUpdated
+                builder: (context, state) {
+                  final isConnected = state is SensorDataUpdated
+                      ? state.isEsp8266Connected
+                      : false;
+                  final lastUpdate = state is SensorDataUpdated
                       ? state.reading.timestamp
-                      : null,
-                ),
+                      : null;
+                  return Esp8266Card(
+                    isConnected: isConnected,
+                    lastUpdate: lastUpdate,
+                  );
+                },
               ),
               const SizedBox(height: 16),
               const SectionLabel('Connected Sensors'),
@@ -48,30 +52,6 @@ class DeviceScreen extends StatelessWidget {
                 iconColor: Colors.lightBlue,
                 title: 'DHT11 Sensor',
                 subtitle: 'Temperature & humidity monitoring',
-              ),
-              const SizedBox(height: 16),
-              const SectionLabel('Communication'),
-              const SizedBox(height: 8),
-              SettingsCard(
-                children: const [
-                  InfoRow(
-                    icon: Icons.wifi_tethering_rounded,
-                    label: 'Protocol',
-                    value: 'HTTP + Supabase',
-                  ),
-                  Divider(color: AppColors.divider),
-                  InfoRow(
-                    icon: Icons.link_rounded,
-                    label: 'Data Source',
-                    value: '192.168.0.109/api/data',
-                  ),
-                  Divider(color: AppColors.divider),
-                  InfoRow(
-                    icon: Icons.storage_rounded,
-                    label: 'Database',
-                    value: 'Supabase Realtime',
-                  ),
-                ],
               ),
             ],
           ),
